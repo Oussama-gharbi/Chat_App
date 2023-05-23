@@ -5,6 +5,8 @@ COPY ./package*.json ./
 RUN npm install
 COPY . .
 RUN npm run build
+
+RUN ls
 # ## Replace the default nginx index page with our react  app
 FROM  nginx:1.21.0-alpine
 COPY --from=build . /usr/share/nginx/html

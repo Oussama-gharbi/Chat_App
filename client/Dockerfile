@@ -1,8 +1,8 @@
 FROM node:14-alpine AS build
-WORKDIR /app
-COPY ./app/package*.json ./
+WORKDIR /client
+COPY ./client/package*.json ./
 RUN npm install
-COPY client/ .
+COPY . .
 RUN npm run build
 # ## Replace the default nginx index page with our react  app
 FROM  nginx:1.21.0-alpine

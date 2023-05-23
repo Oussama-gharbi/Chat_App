@@ -15,28 +15,28 @@ FIMAGE_NAME="chat-app-front"
 BIMAGE_NAME="chat-app-back"
 }
     stages {
-        stage('Build & Test Frontend') {
-            when {
-                expression { isDirectoryChanged('frontend') }
-            }
-            steps {
-                dir('frontend/app') {
-                    // Your frontend build and test steps here
-                    // For example, if you're using npm:
-                    //sh 'npm  install'
-                    sh 'npm run build'
-                    sh 'pwd'
-                    sh 'ls'
-                    //sh 'npm test'
-                }
-            }
-        }
+        // stage('Build & Test Frontend') {
+        //     when {
+        //         expression { isDirectoryChanged('frontend') }
+        //     }
+        //     steps {
+        //         dir('frontend/app') {
+        //             // Your frontend build and test steps here
+        //             // For example, if you're using npm:
+        //             //sh 'npm  install'
+        //             sh 'npm run build'
+        //             sh 'pwd'
+        //             sh 'ls'
+        //             //sh 'npm test'
+        //         }
+        //     }
+        // }
 stage('Build image Frontend') {
             when {
-                expression { isDirectoryChanged('frontend') }
+                expression { isDirectoryChanged('client') }
             }
             steps {
-                dir('frontend') {
+                dir('client') {
                               
                    echo 'building docker image...'
                    sh 'docker build -t chat-app-front .'
@@ -54,10 +54,10 @@ stage('Build image Frontend') {
         
         stage('Build Image Backend') {
             when {
-                expression { isDirectoryChanged('backend') }
+                expression { isDirectoryChanged('server') }
             }
             steps {
-                dir('backend') {
+                dir('server') {
                     // Your backend build and test steps here
                     // For example, if you're using Maven:
 

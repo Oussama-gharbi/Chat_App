@@ -1,5 +1,7 @@
 FROM node:14-alpine AS build
 WORKDIR /client
+RUN pwd
+RUN ls
 COPY ./client/build/package*.json .
 RUN npm install
 COPY . .

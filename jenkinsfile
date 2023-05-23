@@ -1,0 +1,89 @@
+#!/usr/bin/env groovy
+
+
+
+def isDirectoryChanged(String directory) {
+    return sh(script: "git diff --quiet HEAD^ HEAD -- ${directory}", returnStatus: true) != 0
+}
+
+pipeline {
+    agent any
+environment {
+FTAG="2.0"
+BTAG="2.0"
+FIMAGE_NAME="chat-app-front"
+BIMAGE_NAME="chat-app-back"
+}
+    stages {
+        stage('Build & Test Frontend') {
+            when {
+                expression { isDirectoryChanged('frontend') }
+            }
+            steps {
+                dir('frontend/app') {
+                    // Your frontend build and test steps here
+                    // For example, if you're using npm:
+                    //sh 'npm  install'
+                    sh 'npm run build'
+                    sh 'pwd'
+                    sh 'ls'
+                    //sh 'npm test'
+                }
+            }
+        }
+stage('Build image Frontend') {
+            when {
+                expression { isDirectoryChanged('frontend') }
+            }
+            steps {
+                dir('frontend') {
+                              
+                   echo 'building docker image...'
+                   sh 'docker build -t chat-app-front .'
+                    echo ' docker login...'
+                   withCredentials([usernamePassword(credentialsId: 'docker_hub_token', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+                 sh "echo $PASS | docker login -u $USER --password-stdin"
+                 }
+                  echo ' Docker push...'
+                  sh 'docker tag $FIMAGE_NAME oussamagharbi/$FIMAGE_NAME:$FTAG'
+                  sh "docker push oussamagharbi/$FIMAGE_NAME:$FTAG"
+                }
+            }
+        }
+                            
+        
+        stage('Build Image Backend') {
+            when {
+                expression { isDirectoryChanged('backend') }
+            }
+            steps {
+                dir('backend') {
+                    // Your backend build and test steps here
+                    // For example, if you're using Maven:
+
+                    sh 'docker build -t $BIMAGE_NAME .'
+                    sh 'docker tag $BIMAGE_NAME oussamagharbi/$BIMAGE_NAME:$BTAG'
+                    echo 'Docker login'
+                    withCredentials([usernamePassword(credentialsId: 'docker_hub_token', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+                 sh "echo $PASS | docker login -u $USER --password-stdin"
+                   }
+                    echo ' Docker push...'
+                    sh "docker push oussamagharbi/$BIMAGE_NAME:$BTAG"
+                }
+            }
+        }
+
+        //stage('Deploy in remote server') {
+          //  steps {
+          //  sh 'docker-compose -f docker-compose.yaml up -d'
+                //sshagent(['jen_deploy_server']) {
+                //echo 'hello world'
+                //sh 'ssh -o StrictHostKeyChecking=no ubuntu@10.165.147.49 uptime "whoami"'
+               // echo "Login success"
+                 //sh 'ssh ec2-user@44.211.78.216 sudo docker run -d -p 8081:8080 --name neapp ishaan6201/webapp:${BUILD_TAG} '
+                  
+            
+        
+    }
+}
+

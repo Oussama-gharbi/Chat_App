@@ -1,0 +1,54 @@
+version: '2'
+services:
+  frontend:
+    container_name: frontend
+    image: oussamagharbi/chat-app-front:2.0
+    ports:
+      - 3000:80
+    networks:
+      mynet1:
+        ipv4_address: 10.165.147.2
+  backend:
+    container_name: backend
+    image: oussamagharbi/chat-app-back:1.0
+    ports:
+      - 5000:5000
+    networks:
+      mynet1:
+        ipv4_address: 10.165.147.3
+  mongodb:
+    container_name: mongodb
+    image: mongo
+    ports:
+      - 27017:27017
+    networks:
+      mynet1:
+        ipv4_address: 10.165.147.4
+    volumes:
+      - ./containers_backups/mongo:/data/db
+  mongo-express:
+    container_name: express
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=mongodb
+    networks:
+      mynet1:
+        ipv4_address: 10.165.147.5
+    depends_on:
+      - "mongodb"
+  
+networks:
+    mynet1:
+        ipam:
+            driver: default
+            config:
+                - subnet: 10.165.147.0/16
+
+volumes:
+  mongo:
+    driver: local
+  jenkins:
+    driver: local

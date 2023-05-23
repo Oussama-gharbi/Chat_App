@@ -76,8 +76,8 @@ stage('Build image Frontend') {
         stage('Deploy in remote server') {
            steps {
            sh 'pwd'
-            sh 'docker-compose -f docker-compose.yaml down'
-           sh 'docker-compose -f docker-compose.yaml up -d'
+            sh 'docker-compose  down'
+           sh 'docker-compose  up -d'
                 //sshagent(['jen_deploy_server']) {
                 //echo 'hello world'
                 //sh 'ssh -o StrictHostKeyChecking=no ubuntu@10.165.147.49 uptime "whoami"'

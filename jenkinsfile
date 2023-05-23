@@ -75,6 +75,7 @@ stage('Build image Frontend') {
 
         stage('Deploy in remote server') {
            steps {
+           sh 'pwd'
             sh 'docker-compose -f docker-compose.yaml down'
            sh 'docker-compose -f docker-compose.yaml up -d'
                 //sshagent(['jen_deploy_server']) {

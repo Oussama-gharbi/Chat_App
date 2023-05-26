@@ -2,7 +2,7 @@ FROM node:14-alpine AS build
 WORKDIR /client
 RUN ls
 COPY ./package*.json ./
-RUN npm install
+RUN npm i -g npm@latest
 COPY . .
 RUN npm run build
 

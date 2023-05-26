@@ -1,8 +1,8 @@
 FROM node:14-alpine AS build
 WORKDIR /client
 RUN ls
-COPY ./package*.json ./
-RUN npm i -g npm@latest
+COPY ./package.json ./
+RUN npm install
 COPY . .
 RUN npm run build
 

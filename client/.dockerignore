@@ -1,7 +1,5 @@
 Dockerfile
-docker-compose.yaml
 .gitignore
 node_modules
-Dockerfile
 test.md
 README.md

@@ -75,14 +75,14 @@ stage('Build image Frontend') {
 
         stage('Deploy in remote server') {
            steps {
-           sh 'pwd'
-            sh 'docker-compose  down'
-           sh 'docker-compose  up -d'
+           
+           
                 //sshagent(['jen_deploy_server']) {
                 //echo 'hello world'
-                //sh 'ssh -o StrictHostKeyChecking=no ubuntu@10.165.147.49 uptime "whoami"'
-               // echo "Login success"
-                 //sh 'ssh ec2-user@44.211.78.216 sudo docker run -d -p 8081:8080 --name neapp ishaan6201/webapp:${BUILD_TAG} '
+            sh 'ssh -o StrictHostKeyChecking=no ubuntu@10.165.147.145'
+            echo "Login success"
+            sh 'docker-compose  down'
+           sh 'docker-compose  up -d'      
                   
         }
         }

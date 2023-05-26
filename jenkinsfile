@@ -79,13 +79,13 @@ stage('Build image Frontend') {
                     echo 'deploying docker image to dev-env...'
               
                             
-             //sshagent(['dev-env-key']) {
+             sshagent(['dev-env-key']) {
                        //sh "sudo scp -o StrictHostKeyChecking=no docker-compose.yaml ${DEV_HOST}:/home/ubuntu"
-                       sh 'ssh -i /home/ubuntu/.ssh/id_rsa -v -o StrictHostKeyChecking=no ${DEV_HOST}'  
+                       sh 'ssh -v -o StrictHostKeyChecking=no ${DEV_HOST}'  
                         sh 'docker-compose  down'
                         sh 'docker-compose  up -d'
             
-               
+             }
                
                
                   

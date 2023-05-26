@@ -75,14 +75,23 @@ stage('Build image Frontend') {
 
         stage('Deploy in remote server') {
            steps {
+                    echo 'deploying docker image to dev-env...'
+                   def ec2Instance = "ubuntu@10.165.147.145"
            
-           
-                //sshagent(['jen_deploy_server']) {
-                //echo 'hello world'
+                sshagent(['jen_deploy_server']) {
+             
             sh 'ssh -o StrictHostKeyChecking=no ubuntu@10.165.147.145'
             echo "Login success"
             sh 'docker-compose  down'
-           sh 'docker-compose  up -d'      
+            sh 'docker-compose  up -d'      
+               
+             sshagent(['dev-env-key']) {
+                       sh "scp -o StrictHostKeyChecking=no docker-compose.yaml ${ec2Instance}:/home/ubuntu"
+                       sh "ssh -o StrictHostKeyChecking=no ${ec2Instance}  "docker-compose  down ; docker-compose  up -d"'  
+               
+               
+               
+               
                   
         }
         }
